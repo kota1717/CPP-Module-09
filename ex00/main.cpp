@@ -9,12 +9,22 @@ int main(int argc, char**argv)
 		std::cerr << "Error: could not open file." << std::endl;
 		return EXIT_FAILURE;
 	}
-	
+
 	std::ifstream input_file(argv[1]);
 	if (!input_file.is_open()) {
 		std::cerr << "Error: could not open file." << std::endl;
 		return EXIT_FAILURE;
 	}
+
+	std::ifstream load_file("data.csv");
+	if (!load_file.is_open()) {
+		std::cerr << "Error: could not open file." << std::endl;
+		return EXIT_FAILURE;
+	}
+
+	// data.csvを一行ずつdb_に格納していく
+	BitcoinExchange bitcoinexchange;
+	
 }
 
 //入力ファイルの確認ー＞データベースをmapコンテナにいれてー＞データベース照会、計算をする

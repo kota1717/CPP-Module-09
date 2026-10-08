@@ -3,13 +3,18 @@
 
 #include <map>
 #include <string>
+#include <iostream>
+#include <fstream>
 
-class DataToRate {
+class BitcoinExchange {
+	std::map<std::string, float> db_;
 public:
-	DataToRate();
-	DataToRate(const DataToRate& other);
-	DataToRate& operator=(const DataToRate& other);
-	~DataToRate();
+	BitcoinExchange();
+	BitcoinExchange(const BitcoinExchange& other);
+	BitcoinExchange& operator=(const BitcoinExchange& other);
+	~BitcoinExchange();
+
+	void loadDatabase(const std::ifstream& database);
 }
 
 #endif
