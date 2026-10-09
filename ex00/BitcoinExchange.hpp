@@ -5,6 +5,10 @@
 #include <string>
 #include <iostream>
 #include <fstream>
+#include <sstream>
+#include <algorithm>
+#include <cctype>
+#include <locale>
 
 class BitcoinExchange {
 	std::map<std::string, float> db_;
@@ -14,8 +18,11 @@ public:
 	BitcoinExchange& operator=(const BitcoinExchange& other);
 	~BitcoinExchange();
 
-	void loadDatabase(const std::ifstream& database);
-}
+	float getExchangeRate(const std::string& date);
+
+	bool loadDatabase(const std::string& dbPath);
+	bool processInput(char* inputPath);
+};
 
 #endif
 
@@ -29,7 +36,7 @@ public:
 // プログラムは以下のルールに従う必要があります：
 // • プログラム名は btc としてください。
 // • プログラムは引数としてファイルを受け取る必要があります。
-// • このファイルの各行は、以下の形式である必要があります："date | value"。
+// • 入力ファイルの各行は、以下の形式である必要があります："date | value"。
 // • 有効な日付は、常に Year-Month-Day の形式である必要があります。
 // • 有効な値は、float型、または0から1000までの正の整数である必要があります。
 
