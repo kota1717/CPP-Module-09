@@ -7,6 +7,7 @@ RMDIR := rm -rf
 OBJ_DIR := obj
 
 SRCS := main.cpp \
+				PmergeMe.cpp
 
 OBJS := $(SRCS:%.cpp=$(OBJ_DIR)/%.o)
 
