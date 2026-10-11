@@ -57,20 +57,20 @@ int main(int argc, char* argv[])
 	double vec_time = static_cast<double>(vec_end - vec_start) / CLOCKS_PER_SEC * 1000000.0;
 
 	// deque process time
-	// clock_t deq_start = clock();
+	clock_t deq_start = clock();
 
-	// std::deque<int> sorted_deq = FordJohnsonSort(deq);
+	std::deque<int> sorted_deq = FordJohnsonSort(deq);
 
-	// clock_t deq_end = clock();
-	// double deq_time = static_cast<double>(deq_end - deq_start) / CLOCKS_PER_SEC * 1000000.0;
+	clock_t deq_end = clock();
+	double deq_time = static_cast<double>(deq_end - deq_start) / CLOCKS_PER_SEC * 1000000.0;
 
 	std::cout << "After: ";
 	printContainer(sorted_vec);
 
 	std::cout << "Time to process a range of " << vec.size()
 						<< " elements with std::vector : " << vec_time << " us"<< std::endl;
-	// std::cout << "Time to process a range of " << deq.size()
-	// 					<< " elements with std::deque : " << deq_time << " us"<< std::endl;
+	std::cout << "Time to process a range of " << deq.size()
+						<< " elements with std::deque : " << deq_time << " us"<< std::endl;
 	return EXIT_SUCCESS;
 }
 
