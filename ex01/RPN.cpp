@@ -10,7 +10,7 @@ int applyOperator(int num1, int num2, char operator_char) {
     if (operator_char == '+')
         return num1 + num2;
 
-    if (operator_char == '-') 
+    if (operator_char == '-')
         return num1 - num2;
 
     if (operator_char == '*')
@@ -47,7 +47,6 @@ void calculateRPN(const std::string& expression) {
             nums.pop();
             int num1 = nums.top();
             nums.pop();
-            // operatorに応じて計算してpushする。
             try {
                 int result = applyOperator(num1, num2, expression[i]);
                 nums.push(result);
@@ -66,6 +65,3 @@ void calculateRPN(const std::string& expression) {
     }
     std::cout << nums.top() << std::endl;
 }
-
-// 引数チェック　数値が0 ~ 9 演算子　+ - * /　かどうか 　スペースごとにスキップしてスタックに積むか　演算するか
-// 数値が来たらpushする 演算子が来た場合は最後に積んだ２つをpopして計算してその結果をpushする 
