@@ -19,7 +19,7 @@ bool BitcoinExchange::loadDatabase(const std::string& dbPath) {
 	std::ifstream database(dbPath.c_str());
 	if (!database.is_open())
 		return false;
-	
+
 	std::string line;
 	// skip header line
 	std::getline(database, line);
@@ -54,13 +54,13 @@ bool isLeapYear(int year) {
 }
 
 // 有効な日付は、常に Year-Month-Day の形式である必要があります。
-// year の範囲？ Month 1 ~ 12 Day 1-31 1-30 2月は、うるう年も対応しなくてはいけない？ 
+// year の範囲？ Month 1 ~ 12 Day 1-31 1-30 2月は、うるう年も対応しなくてはいけない？
 bool isValidDate(const std::string& date) {
 	if (date.length() != 10)
 		return false;
 	if ((date[4] != '-') || (date[7] != '-'))
 		return false;
-	
+
 	for (size_t i = 0; i < date.length(); i++) {
 		if ((i == 4) || (i == 7))
 			continue;
@@ -74,12 +74,12 @@ bool isValidDate(const std::string& date) {
 
 	if (month < 1 || month > 12)
 		return false;
-	
+
 	int daysInMonth[] = {0, 31, 28, 31, 30, 31, 30, 31, 31, 30, 31, 30, 31};
 
 	if (month == 2 && isLeapYear(year))
 		daysInMonth[2] = 29;
-	
+
 	if (day < 1 || day > daysInMonth[month])
 		return false;
 
@@ -97,7 +97,7 @@ bool parseValue(float& value ,std::string valStr) {
 
 	char* endPtr;
 	double val = std::strtod(valStr.c_str(), &endPtr);
-	
+
 	if (*endPtr != '\0') {
 		std::cerr << "Error: bad input => " << valStr << std::endl;
 		return false;
@@ -133,7 +133,7 @@ bool BitcoinExchange::processInput(char* inputPath) {
 	std::ifstream inputfile(inputPath);
 	if (!inputfile.is_open())
 		return false;
-	
+
 	std::string line;
 	std::getline(inputfile, line);
 
@@ -154,16 +154,16 @@ bool BitcoinExchange::processInput(char* inputPath) {
 			continue;
 		}
 
-		float value;
+		float value = 0.0f;
 		if (!parseValue(value, valStr))
 			continue;
-		
+
 		try {
 			float rate = getExchangeRate(date);
 			std::cout << date << " => " << value  << " = " << (rate * value) << std::endl;
 		} catch (const std::exception& e) {
 			std::cerr << e.what() << std::endl;
-		}	
+		}
 	}
 	return true;
 }
