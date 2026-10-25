@@ -37,7 +37,7 @@ bool BitcoinExchange::loadDatabase(const std::string& dbPath) {
 }
 
 std::string trim(std::string str) {
-	// spaceを飛ばして格納する
+
 	size_t first = 0;
 	while (first < str.length() && isspace(static_cast<unsigned char>(str[first])))
 		first++;
@@ -53,8 +53,6 @@ bool isLeapYear(int year) {
 	return ((year % 4 == 0 && year % 100 != 0) || (year % 400 == 0));
 }
 
-// 有効な日付は、常に Year-Month-Day の形式である必要があります。
-// year の範囲？ Month 1 ~ 12 Day 1-31 1-30 2月は、うるう年も対応しなくてはいけない？
 bool isValidDate(const std::string& date) {
 	if (date.length() != 10)
 		return false;
@@ -86,9 +84,6 @@ bool isValidDate(const std::string& date) {
 	return true;
 }
 
-// 有効な値は、float型、または0から1000までの正の整数である必要があります。
-// Error: not a positive number.  負の値でないか
-// Error: too large a number.　　　範囲に収まっているか
 bool parseValue(float& value ,std::string valStr) {
 	if (valStr.empty()) {
 		std::cerr << "Error: bad input => " << valStr << std::endl;
@@ -117,18 +112,15 @@ bool parseValue(float& value ,std::string valStr) {
 	return true;
 }
 
-// dateから、同じか、近い日付を探してそこのrateをデータベースから取得する
 float BitcoinExchange::getExchangeRate(const std::string& date) {
 	std::map<std::string, float>::const_iterator it = db_.upper_bound(date);
 	if (it == db_.begin()) {
-		// データベースよりも前の日付が渡されたとき
 		throw std::runtime_error("Error: bad input  => " + date);
 	}
 	--it;
 	return it->second;
 }
 
-// 受け取った入力ファイルを開けるか確認、中身を解析して、db_と照らし合わせて適切な出力を出す。
 bool BitcoinExchange::processInput(char* inputPath) {
 	std::ifstream inputfile(inputPath);
 	if (!inputfile.is_open())
@@ -167,6 +159,3 @@ bool BitcoinExchange::processInput(char* inputPath) {
 	}
 	return true;
 }
-
-// • 入力ファイルの各行は、以下の形式である必要があります："date | value"。
-// • 有効な日付は、常に Year-Month-Day の形式である必要があります。
