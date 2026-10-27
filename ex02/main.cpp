@@ -48,6 +48,8 @@ int main(int argc, char* argv[])
 	std::cout << "Before: ";
 	printContainer(vec);
 
+	size_t total_size = vec.size();
+
 	// vector process time
 	clock_t vec_start = clock();
 
@@ -67,9 +69,9 @@ int main(int argc, char* argv[])
 	std::cout << "After: ";
 	printContainer(sorted_vec);
 
-	std::cout << "Time to process a range of " << vec.size()
+	std::cout << "Time to process a range of " << total_size
 						<< " elements with std::vector : " << vec_time << " us"<< std::endl;
-	std::cout << "Time to process a range of " << deq.size()
+	std::cout << "Time to process a range of " << total_size
 						<< " elements with std::deque : " << deq_time << " us"<< std::endl;
 	return EXIT_SUCCESS;
 }
