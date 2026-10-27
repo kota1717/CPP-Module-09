@@ -1,27 +1,39 @@
 #include "RPN.hpp"
 #include <stack>
 #include <cctype>
+#include <limits>
 
 bool isOperator(char c) {
     return c == '+' || c == '-' || c == '*' || c == '/';
 }
 
 int applyOperator(int num1, int num2, char operator_char) {
-    if (operator_char == '+')
+    if (operator_char == '+') {
+        if (num1 > (std::numeric_limits<int>::max() - num2))
+            throw std::overflow_error("Error: overflow");
         return num1 + num2;
+    }
 
-    if (operator_char == '-')
+    if (operator_char == '-') {
+        if (num1 < (std::numeric_limits<int>::min() + num2))
+            throw std::underflow_error("Error: underflow error");
         return num1 - num2;
+    }
 
-    if (operator_char == '*')
+    if (operator_char == '*') {
+        if (num2 != 0 && num1 > (std::numeric_limits<int>::max() / num2))
+            throw std::overflow_error("overflow error");
         return num1 * num2;
+    }
 
     if (operator_char == '/') {
         if (num2 == 0)
-            throw std::runtime_error("Zero division");
+            throw std::runtime_error("Zero division error");
+        if (num1 == std::numeric_limits<int>::min() && num2 == -1)
+            throw std::overflow_error("Error: overflow");
         return num1 / num2;
     }
-    throw std::invalid_argument("Invalid operator");
+    return 0;
 }
 
 void calculateRPN(const std::string& expression) {
@@ -52,6 +64,7 @@ void calculateRPN(const std::string& expression) {
                 nums.push(result);
             }   catch (std::exception& e) {
                 std::cerr << e.what() << std::endl;
+                return;
             }
         }
         else {
