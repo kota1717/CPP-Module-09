@@ -9,6 +9,7 @@
 #include <algorithm>
 #include <cctype>
 #include <locale>
+#include <cmath>
 
 class BitcoinExchange {
 	std::map<std::string, float> db_;
@@ -25,4 +26,3 @@ public:
 };
 
 #endif
-

@@ -85,15 +85,10 @@ bool isValidDate(const std::string& date) {
 }
 
 bool parseValue(float& value ,std::string valStr) {
-	if (valStr.empty()) {
-		std::cerr << "Error: bad input => " << valStr << std::endl;
-		return false;
-	}
-
 	char* endPtr;
 	double val = std::strtod(valStr.c_str(), &endPtr);
 
-	if (*endPtr != '\0') {
+	if (*endPtr != '\0' || std::isinf(val) || std::isnan(val)) {
 		std::cerr << "Error: bad input => " << valStr << std::endl;
 		return false;
 	}
@@ -140,6 +135,11 @@ bool BitcoinExchange::processInput(char* inputPath) {
 
 		std::string date = trim(line.substr(0, pipePos));
 		std::string valStr = trim(line.substr(pipePos + 1));
+
+		if (date.empty() || valStr.empty()) {
+			std::cerr << "Error: bad input => " << line << std::endl;
+			continue;
+		}
 
 		if (!isValidDate(date)) {
 			std::cerr << "Error: bad input => " << line << std::endl;
