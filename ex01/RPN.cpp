@@ -51,7 +51,7 @@ void calculateRPN(const std::string& expression) {
                 int result = applyOperator(num1, num2, expression[i]);
                 nums.push(result);
             }   catch (std::exception& e) {
-                std::cerr << "Error" << std::endl;
+                std::cerr << e.what() << std::endl;
             }
         }
         else {
