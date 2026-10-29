@@ -110,19 +110,33 @@ bool parseValue(float& value ,std::string valStr) {
 float BitcoinExchange::getExchangeRate(const std::string& date) {
 	std::map<std::string, float>::const_iterator it = db_.upper_bound(date);
 	if (it == db_.begin()) {
-		throw std::runtime_error("Error: bad input  => " + date);
+		throw std::runtime_error("Error: date before database start => " + date);
 	}
 	--it;
 	return it->second;
 }
 
-bool BitcoinExchange::processInput(char* inputPath) {
+bool BitcoinExchange::processInput(const char* inputPath) {
 	std::ifstream inputfile(inputPath);
-	if (!inputfile.is_open())
+	if (!inputfile.is_open()) {
+		std::cerr << "Error: could not open input file." << std::endl;
 		return false;
+	}
 
 	std::string line;
-	std::getline(inputfile, line);
+
+	if (!std::getline(inputfile, line)) {
+    std::cerr << "Error: empty file." << std::endl;
+    return false;
+	}
+
+	size_t headerPipePos = line.find('|');
+  if (headerPipePos == std::string::npos ||
+      trim(line.substr(0, headerPipePos)) != "date" ||
+      trim(line.substr(headerPipePos + 1)) != "value") {
+    std::cerr << "Error: invalid file format (header must be 'date | value')." << std::endl;
+    return false;
+  }
 
 	while (std::getline(inputfile, line)) {
 		if (line.empty())

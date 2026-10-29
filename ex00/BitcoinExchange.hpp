@@ -22,7 +22,7 @@ public:
 	float getExchangeRate(const std::string& date);
 
 	bool loadDatabase(const std::string& dbPath);
-	bool processInput(char* inputPath);
+	bool processInput(const char* inputPath);
 };
 
 #endif

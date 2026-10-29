@@ -18,10 +18,7 @@ int main(int argc, char**argv)
 	}
 
 	if (!btc.processInput(argv[1]))
-	{
-		std::cerr << "Error: could not open input file." << std::endl;
 		return EXIT_FAILURE;
-	}
-
+	
 	return EXIT_SUCCESS;
 }
