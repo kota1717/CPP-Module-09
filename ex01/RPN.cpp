@@ -9,26 +9,39 @@ bool isOperator(char c) {
 
 int applyOperator(int num1, int num2, char operator_char) {
     if (operator_char == '+') {
-        if (num1 > (std::numeric_limits<int>::max() - num2))
+        if (num2 > 0 && num1 > (std::numeric_limits<int>::max() - num2))
             throw std::overflow_error("Error: overflow");
+        if (num2 < 0 && num1 < std::numeric_limits<int>::min() - num2)
+            throw std::underflow_error("Error: underflow");
         return num1 + num2;
     }
 
     if (operator_char == '-') {
-        if (num1 < (std::numeric_limits<int>::min() + num2))
-            throw std::underflow_error("Error: underflow error");
+        if (num2 > 0 && num1 < (std::numeric_limits<int>::min() + num2))
+            throw std::underflow_error("Error: underflow");
+        if (num2 < 0 && num1 > (std::numeric_limits<int>::max() + num2))
+            throw std::overflow_error("Error: overflow");
         return num1 - num2;
     }
 
     if (operator_char == '*') {
-        if (num2 != 0 && num1 > (std::numeric_limits<int>::max() / num2))
-            throw std::overflow_error("overflow error");
+        if (num1 > 0) {
+            if (num2 > 0 && num1 > (std::numeric_limits<int>::max() / num2))
+                throw std::overflow_error("Error: overflow");
+            if (num2 < 0 && num2 < (std::numeric_limits<int>::min() / num1))
+                throw std::underflow_error("Error: underflow");
+        } else if (num1 < 0) {
+            if (num2 > 0 && num1 < (std::numeric_limits<int>::min() / num2))
+                throw std::underflow_error("Error: underflow");
+            if (num2 < 0 && num2 < (std::numeric_limits<int>::max() / num1))
+                throw std::overflow_error("Error: overflow");
+        }
         return num1 * num2;
     }
 
     if (operator_char == '/') {
         if (num2 == 0)
-            throw std::runtime_error("Zero division error");
+            throw std::runtime_error("Error: division by zero");
         if (num1 == std::numeric_limits<int>::min() && num2 == -1)
             throw std::overflow_error("Error: overflow");
         return num1 / num2;
@@ -46,7 +59,7 @@ void calculateRPN(const std::string& expression) {
         if (std::isspace(static_cast<unsigned char>(expression[i]))) {
             continue;
         }
-        if (std::isdigit(expression[i])) {
+        if (std::isdigit(static_cast<unsigned char>(expression[i]))) {
             nums.push(expression[i] - '0');
             continue;
         }
