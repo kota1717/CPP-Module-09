@@ -20,7 +20,7 @@ size_t getJacobSthal(size_t n) {
 }
 
 void insertLoser(std::vector<int>& mainChain, const std::vector<int>& pending,
-								const std::vector<size_t>& mainChainBoundIdx) {
+								const std::vector<int>& winner) {
 
 	mainChain.insert(mainChain.begin(), pending[0]);
 
@@ -33,7 +33,7 @@ void insertLoser(std::vector<int>& mainChain, const std::vector<int>& pending,
 		size_t target_bound = std::min(curr_jacob, num_pairs);
 
 		for (size_t i = target_bound; i > last_jacob; i--) {
-			int A_i = mainChain[mainChainBoundIdx[i - 1] + 1];
+			int A_i = winner[i - 1];
 			int B_i = pending[i - 1];
 
 			std::vector<int>::iterator bound = std::find(mainChain.begin(), mainChain.end(), A_i);
@@ -73,20 +73,20 @@ std::vector<int> FordJohnsonSort(std::vector<int>& nums) {
 
 	std::vector<int> pending(pairs.size());
 	std::vector<bool> used(pairs.size(), false);
-	std::vector<size_t> mainChainBoundIdx(pairs.size());
 
 	for (size_t i = 0; i < mainChain.size(); ++i) {
 		for (size_t j = 0; j < pairs.size(); ++j) {
 			if (!used[j] && pairs[j].first == mainChain[i]) {
 				pending[i] = pairs[j].second;
-				mainChainBoundIdx[i] = i;
 				used[j] = true;
 				break;
 			}
 		}
 	}
 
-	insertLoser(mainChain, pending, mainChainBoundIdx);
+	std::vector<int> winners = mainChain;
+
+	insertLoser(mainChain, pending, winners);
 
 	if (has_odd) {
 		std::vector<int>::iterator pos = std::lower_bound(mainChain.begin(), mainChain.end(), odd_element);
@@ -99,7 +99,7 @@ std::vector<int> FordJohnsonSort(std::vector<int>& nums) {
 // -- deque container version --
 
 void insertLoser(std::deque<int>& mainChain, const std::deque<int>& pending,
-								const std::deque<size_t>& mainChainBoundIdx) {
+								const std::deque<int>& winner) {
 
 	mainChain.insert(mainChain.begin(), pending[0]);
 
@@ -112,7 +112,7 @@ void insertLoser(std::deque<int>& mainChain, const std::deque<int>& pending,
 		size_t target_bound = std::min(curr_jacob, num_pairs);
 
 		for (size_t i = target_bound; i > last_jacob; i--) {
-			int A_i = mainChain[mainChainBoundIdx[i - 1] + 1];
+			int A_i = winner[i - 1];
 			int B_i = pending[i - 1];
 
 			std::deque<int>::iterator bound = std::find(mainChain.begin(), mainChain.end(), A_i);
@@ -153,20 +153,18 @@ std::deque<int> FordJohnsonSort(std::deque<int>& nums) {
 
 	std::deque<int> pending(pairs.size());
 	std::deque<bool> used(pairs.size(), false);
-	std::deque<size_t> mainChainBoundIdx(pairs.size());
 
 	for (size_t i = 0; i < mainChain.size(); ++i) {
 		for (size_t j = 0; j < pairs.size(); ++j) {
 			if (!used[j] && pairs[j].first == mainChain[i]) {
 				pending[i] = pairs[j].second;
-				mainChainBoundIdx[i] = i;
 				used[j] = true;
 				break;
 			}
 		}
 	}
 
-	insertLoser(mainChain, pending, mainChainBoundIdx);
+	insertLoser(mainChain, pending, winner);
 
 	if (has_odd) {
 		std::deque<int>::iterator pos = std::lower_bound(mainChain.begin(), mainChain.end(), odd_element);
